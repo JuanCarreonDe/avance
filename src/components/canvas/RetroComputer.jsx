@@ -5,58 +5,46 @@ import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
 import CanvasLoader from "../Loader";
 
 const RetroComputer = () => {
-  const computer = useGLTF("./retro_computer/scene.gltf");
+  const computer = useGLTF("./earth/scene.gltf");
 
   return (
     <mesh>
       {/* Luz hemisférica */}
-      <hemisphereLight intensity={.5} skyColor="#ffffff" groundColor="#000000" />
-
-      {/* Luz puntual */}
-      <pointLight position={[10, 10, 10]} intensity={.5} />
-
-      {/* Luz focal */}
+      <hemisphereLight intensity={.1} skyColor="#ffffff" groundColor="#000000" />
 
       <spotLight
-        position={[0, 50, 0]}
-        angle={0.5}
-        penumbra={2}
-        intensity={1.5}
-        distance={200}
+        position={[10, 0, 0]}
+        angle={0.3}
+        penumbra={1}
+        intensity={2}
+        distance={100}
         castShadow
       />
       <spotLight
-        position={[0, 50, 40]}
-        angle={0.5}
-        penumbra={2}
-        intensity={1.5}
-        distance={200}
+        position={[10, 2, 0]}
+        angle={0.3}
+        penumbra={1}
+        intensity={1}
+        distance={100}
         castShadow
       />
       <spotLight
-        position={[0, 50, -40]}
-        angle={0.5}
-        penumbra={2}
-        intensity={1.5}
-        distance={200}
+        position={[10, -2, 0]}
+        angle={0.3}
+        penumbra={1}
+        intensity={1}
+        distance={100}
         castShadow
       />
       <spotLight
-        position={[40, 10, 0]}
-        angle={0.5}
-        penumbra={2}
-        intensity={1.5}
-        distance={200}
+        position={[10, 10, 0]}
+        angle={0.3}
+        penumbra={1}
+        intensity={1}
+        distance={100}
         castShadow
       />
-      <spotLight
-        position={[-40, 10, 0]}
-        angle={0.5}
-        penumbra={2}
-        intensity={1.5}
-        distance={200}
-        castShadow
-      />
+
       <primitive 
       object={computer.scene} 
       scale={.5}
@@ -73,12 +61,12 @@ const RetroComputerCanvas = () => {
         frameloop="demand"
         shadows
         dpr={[1, 2]}
-        camera={{ position: [0, 0, 10], fov: 10 }}
+        camera={{ position: [0, 0, 10], fov: 50 }}
         // gl={{ preserveDrawingBuffer: true }}
       >
         <Suspense fallback={<CanvasLoader />}>
           <OrbitControls
-            enableZoom={false}
+            // enableZoom={false}
             maxPolarAngle={Math.PI / 2}
             minPolarAngle={Math.PI / 2}
           />
