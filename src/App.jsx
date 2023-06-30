@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { BrowserRouter } from "react-router-dom";
-import Hero from "./components/Hero";
+import Content from "./components/Content";
 import "./App.css";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <Hero />
+        <Content/>
       </BrowserRouter>
     </>
   );
