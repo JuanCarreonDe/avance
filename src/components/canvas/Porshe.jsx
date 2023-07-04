@@ -20,7 +20,12 @@ const Porshe = () => {
         distance={200}
         castShadow
       />
-      <primitive object={computer.scene} scale={2.5} rotation={[0, 3, 0]} />
+      <primitive 
+      object={computer.scene} 
+      scale={2.5} 
+      rotation={[0, 0, 0]}
+      position={[-50,2.5,-50]}
+      />
     </mesh>
   );
 };

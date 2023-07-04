@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useState, useRef } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import {
   OrbitControls,
   Preload,
@@ -12,35 +12,45 @@ import CanvasLoader from "./Loader";
 import Computers from "./canvas/Computers";
 import Porshe from "./canvas/Porshe";
 import Planet from "./canvas/Planet";
-var distance = 0;
+
+function Animate({ controls, lerping, to, target }) {
+  useFrame(({ camera }, delta) => {
+    if (lerping) {
+      camera.position.lerp(to, delta * 2);
+      controls.current.target.lerp(target, delta * 2);
+    }
+  });
+}
 
 const Escene = () => {
-  const [camera, setCamera] = useState("");
+  const [to, setTo] = useState();
+  const [target, setTarget] = useState();
+
+  const ref = useRef();
+  const [lerping, setLerping] = useState(false);
+  // const [camera, setCamera] = useState("");
   return (
     <div className="hero__canvas">
       <Canvas
-      // frameloop="demand"
-      // shadows
-      // dpr={[1, 2]}
-      // // camera={{ position: camera === "Computer" ? [0, 10, 50] : [10,10,10], fov: 60}}
-      // gl={{ preserveDrawingBuffer: true }}
+        // frameloop="demand"
+        // shadows
+        // dpr={[1, 2]}
+        camera={{ position: [25, 10, 0], fov: 40 }}
+        // gl={{ preserveDrawingBuffer: true }}
+        onPointerDown={() => setLerping(false)}
+        onWheel={() => setLerping(false)}
       >
-        {camera == "Planet" && (
-          <PerspectiveCamera position={[30, 10, 0]} makeDefault />
-        )}
-        {camera == "Pc" && (
-          <PerspectiveCamera position={[30, 10, 50]} makeDefault
-          //  lookAt={[10, 10, 10]}
-           />
-        )}
         <Suspense fallback={<CanvasLoader />}>
           <OrbitControls
+            ref={ref}
+            // target={camera === "Pc" ? [50, 0, 50] : [0, 0, 0]}
+            target={[0, 0, 0]}
             // enableZoom={false}
             maxPolarAngle={Math.PI / 2.1}
-            // minPolarAngle={Math.PI / 3}
-            // maxDistance={50}
-            // minDistance={25}
-            // // enablePan={false}
+            minPolarAngle={Math.PI / 3}
+            maxDistance={50}
+            minDistance={25}
+            // enablePan={false}
             // screenSpacePanning={false}
           />
           <Stars
@@ -51,20 +61,48 @@ const Escene = () => {
             saturation={1} // Saturation 0-1 (default=0)
             fade // Faded dots (default=false)
           />
-          {/* <Porshe/> */}
+          <Porshe />
           <Planet />
           <Computers />
-          <Plane />
+          {/* <Plane /> */}
           <GridPlane />
+          <Animate
+            controls={ref}
+            to={to}
+            target={target}
+            lerping={lerping}
+          />
         </Suspense>
         <Preload all />
       </Canvas>
 
       <div className="escene__btns">
-        <button className="btnEscene" onClick={() => setCamera("Planet")}>
+        <button
+          className="btnEscene"
+          onClick={() => {
+            setTarget({ x: 0, y: 0, z: 0 });
+            setTo({
+              x: 0,
+              y: 5,
+              z: 0,
+            });
+            setLerping(true)
+          }}
+        >
           Planet
         </button>
-        <button className="btnEscene" onClick={() => setCamera("Pc")}>
+        <button
+          className="btnEscene"
+          onClick={() => {
+            setTarget({ x: 50, y: 0, z: 50 });
+            setTo({
+              x: 0,
+              y: 5,
+              z: 50,
+            });
+            setLerping(true)
+          }}
+        >
           Pc
         </button>
       </div>
