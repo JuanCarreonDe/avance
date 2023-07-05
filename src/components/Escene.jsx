@@ -96,7 +96,7 @@ const Escene = () => {
           onClick={() => {
             setTarget({ x: 50, y: 0, z: 50 });
             setTo({
-              x: 0,
+              x: 30,
               y: 5,
               z: 50,
             });
