@@ -54,7 +54,7 @@ const Computers = () => {
       <pointLight intensity={1} position={[0, -5, 0]} />
       <primitive 
       object={computer.scene} scale={.5} 
-      position={[50, .2, 50]}
+      position={[50, .2, 50.28]}
       rotation={[0, 3.15, 0]}
       />
     </mesh>

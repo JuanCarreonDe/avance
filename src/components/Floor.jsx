@@ -1,7 +1,3 @@
-import React, { Suspense, useEffect, useState, useRef  } from "react";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Preload, useGLTF, Stars } from "@react-three/drei";
-
 const floorWidth = 200;
 const floorHeight = 200;
 
