@@ -61,7 +61,7 @@ const Escene = () => {
             saturation={1} // Saturation 0-1 (default=0)
             fade // Faded dots (default=false)
           />
-          <Porshe />
+          {/* <Porshe /> */}
           <Planet />
           <Computers />
           {/* <Plane /> */}
