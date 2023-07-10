@@ -150,7 +150,7 @@ canvas {
   /* mix-blend-mode: difference; */
 }
 
-@media (max-width: 800px) {
+@media (max-width: 500px) {
   .cursor, .cursor2 {
     display: none;
   }

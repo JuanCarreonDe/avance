@@ -26,7 +26,7 @@ const Planet = () => {
       object={computer.scene} 
       scale={0.5} 
       rotation={[0, 0, 0]}
-      position={[0,2.5,0]}
+      position={[0,2.8,0]}
       />
     </mesh>
   );

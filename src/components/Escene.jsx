@@ -13,29 +13,46 @@ import Computers from "./canvas/Computers";
 import Porshe from "./canvas/Porshe";
 import Planet from "./canvas/Planet";
 
-function Animate({ controls, lerping, to, target }) {
+const Animate = ({ controls, lerping, positionCamera, target }) => {
   useFrame(({ camera }, delta) => {
     if (lerping) {
-      camera.position.lerp(to, delta * 2);
+      camera.position.lerp(positionCamera, delta * 2);
+
       controls.current.target.lerp(target, delta * 2);
+      setTimeout(() => {
+        controls.current.maxDistance = 70;
+        controls.current.minPolarAngle = Math.PI / 3;
+
+        controls.current.maxPolarAngle = Math.PI / 2.1;
+        console.log("cambiao");
+      }, 5000);
     }
   });
-}
-
+};
 const Escene = () => {
-  const [to, setTo] = useState();
+  const [positionCamera, setPositionCamera] = useState();
   const [target, setTarget] = useState();
 
   const ref = useRef();
   const [lerping, setLerping] = useState(false);
-  // const [camera, setCamera] = useState("");
+
+  useEffect(() => {
+    setPositionCamera({
+      x: -15,
+      y: 5,
+      z: 0,
+    });
+    setTarget({ x: 0, y: 0, z: 0 });
+    setLerping(true);
+  }, []);
+
   return (
     <div className="hero__canvas">
       <Canvas
         // frameloop="demand"
         // shadows
         // dpr={[1, 2]}
-        camera={{ position: [25, 10, 0], fov: 40 }}
+        camera={{ position: [0, -400, 0], fov: 30 }}
         // gl={{ preserveDrawingBuffer: true }}
         onPointerDown={() => setLerping(false)}
         onWheel={() => setLerping(false)}
@@ -44,15 +61,17 @@ const Escene = () => {
           <OrbitControls
             ref={ref}
             // target={camera === "Pc" ? [50, 0, 50] : [0, 0, 0]}
+            // target={[100, 50, 100]}
             target={[0, 0, 0]}
             // enableZoom={false}
-            maxPolarAngle={Math.PI / 2.1}
-            minPolarAngle={Math.PI / 3}
-            maxDistance={50}
+            // maxPolarAngle={Math.PI / 2.1}
+            // minPolarAngle={Math.PI / 3}
+            // maxDistance={50}
             minDistance={25}
             // enablePan={false}
             // screenSpacePanning={false}
           />
+          <fog attach="fog" color="#111" near={1} far={180} />
           <Stars
             radius={100} // Radius of the inner sphere (default=100)
             depth={50} // Depth of area where stars should fit (default=50)
@@ -68,7 +87,7 @@ const Escene = () => {
           <GridPlane />
           <Animate
             controls={ref}
-            to={to}
+            positionCamera={positionCamera}
             target={target}
             lerping={lerping}
           />
@@ -81,12 +100,12 @@ const Escene = () => {
           className="btnEscene"
           onClick={() => {
             setTarget({ x: 0, y: 0, z: 0 });
-            setTo({
-              x: 0,
+            setPositionCamera({
+              x: -15,
               y: 5,
               z: 0,
             });
-            setLerping(true)
+            setLerping(true);
           }}
         >
           Planet
@@ -95,12 +114,12 @@ const Escene = () => {
           className="btnEscene"
           onClick={() => {
             setTarget({ x: 50, y: 0, z: 50 });
-            setTo({
+            setPositionCamera({
               x: 30,
               y: 5,
               z: 50,
             });
-            setLerping(true)
+            setLerping(true);
           }}
         >
           Pc
