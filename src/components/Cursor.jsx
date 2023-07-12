@@ -14,7 +14,7 @@ const Cursor = () => {
       cursorRef.current.style.transform = `translate3d(${cordsX}px, ${cordsY}px, 0)`;
       setTimeout(() => {
         cursorRef2.current.style.transform = `translate3d(${cordsX}px, ${cordsY}px, 0)`;
-      }, 200);
+      }, 100);
     });
   });
   return (

@@ -1,5 +1,5 @@
-const floorWidth = 200;
-const floorHeight = 200;
+const floorWidth = 500;
+const floorHeight = 500;
 
 const Plane = () => {
   return (
@@ -16,7 +16,7 @@ function GridPlane() {
   return (
     <gridHelper
       position={[0, 0, 0]}
-      args={[floorWidth, floorHeight, "#111", "#111"]}
+      args={[floorWidth, floorHeight, "#333", "#333"]}
     />    
   );
 }
