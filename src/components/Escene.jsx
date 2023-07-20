@@ -1,86 +1,134 @@
-import React, { Suspense, useEffect, useState, useRef } from "react";
+// imports
+import { Suspense, useEffect, useState, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import {
-  OrbitControls,
-  Preload,
-  useGLTF,
-  Stars,
-  PerspectiveCamera,
-  ContactShadows,
-} from "@react-three/drei";
+import { OrbitControls, Preload, Stars } from "@react-three/drei";
 import { Plane, GridPlane } from "./Floor";
+
+// import components
 import CanvasLoader from "./Loader";
 import Computers from "./canvas/Computers";
 import Porshe from "./canvas/Porshe";
 import Planet from "./canvas/Planet";
-import { AmbientLight } from "three";
+import Buttons from "./Buttons";
+import { models } from "../constants";
+import { Html } from "@react-three/drei";
 
-let unsetPolarAngle = true;
+    // consts
+    const radius = 100; // Radio del círculo
+    const center = { x: 0, z: 0 }; // Centro del círculo (coordenadas x y z)
 
+
+// animation to camera and target
 const Animate = ({ controls, lerping, positionCamera, target }) => {
   useFrame(({ camera }, delta) => {
     if (lerping) {
       camera.position.lerp(positionCamera, delta * 3);
-
       controls.current.target.lerp(target, delta * 3);
-      // console.log(delta *2);
-      if (unsetPolarAngle) {
+      console.log(controls.current.maxDistance);
+      if (controls.current.maxDistance === Infinity) {
         setTimeout(() => {
-          controls.current.maxDistance = 40;
-          controls.current.minPolarAngle = Math.PI / 2.8;
-
-          controls.current.maxPolarAngle = Math.PI / 2.2;
-          console.log("cambiado");
+          controls.current.maxDistance = 60;
         }, 7000);
-        unsetPolarAngle = false;
       }
+      console.log(controls.current.target);
     }
   });
 };
 
+// function to calculate the position of the models in a circle
+const calculateTargetCoordinates = (model, radius, center) => {
+  const angle = (360 / models.length) * model.id;
+  const x = center.x + radius * Math.cos((angle * Math.PI) / 180);
+  const z = center.z + radius * Math.sin((angle * Math.PI) / 180);
+  return { x, y: model.target.y, z };
+};
 
+function Annotations() {
+
+  return (
+    <>
+      {models.map((model, i) => {
+        const { x, y, z } = calculateTargetCoordinates(model, radius, center);
+        return (
+          <Html key={model.id} position={[x, model.target.y, z]}  >
+            <svg height="34" width="34" transform="translate(-16 -16)" style={{ cursor: 'pointer' }}>
+              <circle cx="17" cy="17" r="16" stroke="white" strokeWidth="2" fill="rgba(255,255,255,.66)" 
+              onClick={() => {
+                handleButtonClick(model)
+                alert("algo");
+              }} 
+              />
+              <text x="12" y="22" fill="white" fontSize={17} fontFamily="monospace" style={{ pointerEvents: 'none' }}>
+                {i + 1}
+              </text>
+            </svg>
+            {/* {a.description && i === selected && (
+              <div id={'desc_' + i} className="annotationDescription" dangerouslySetInnerHTML={{ __html: a.description }} />
+            )} */}
+          </Html>
+        )
+      })}
+    </>
+  )
+}
+
+// jsx and return
 const Escene = () => {
-  const [positionCamera, setPositionCamera] = useState();
-  const [target, setTarget] = useState();
-
-  const ref = useRef();
-  const [lerping, setLerping] = useState(false);
-
+  
+  // effect to welcome animation
   useEffect(() => {
     setPositionCamera({
-      x: -15,
+      x: 15,
       y: 5,
-      z: 0,
+      z: 10,
     });
     setTarget({ x: 0, y: 0, z: 0 });
     setLerping(true);
   }, []);
 
+  // states
+  const [positionCamera, setPositionCamera] = useState();
+  const [target, setTarget] = useState();
+  const [lerping, setLerping] = useState(false);
+  const ref = useRef();
+  const [active, setActive] = useState();
+
+
+
+  // function to move the camera, change the target and add the active class to the button
+  const handleButtonClick = (model) => {
+    const { x, y, z } = calculateTargetCoordinates(model, radius, center);
+
+    setActive(model.id);
+    setTarget({ x, y, z });
+    setPositionCamera(model.camera);
+    setLerping(true);
+    console.log({x, y, z});
+  };
+
+  // return
   return (
     <div className="hero__canvas">
       <Canvas
-        // frameloop="demand"
-        // shadows
-        // dpr={[1, 2]}
-        // onCreated={(state) =>{
-          // state.gl.setClearColor("#0f0012")
-        // }}
-        camera={{ position: [0, -300, 0], fov: 30 }}
-        // gl={{ preserveDrawingBuffer: true }}
+        camera={{ position: [0, 700, 10], fov: 30 }}
         onPointerDown={() => setLerping(false)}
         onWheel={() => setLerping(false)}
-        // onContextMenu={() =>setLerping(false)}
       >
-        <fog attach="fog" args={["#000", 90, 110]} />
+        <fog attach="fog" args={["#000", 90, 300]} />
         <Suspense fallback={<CanvasLoader />}>
           <OrbitControls
+            ref={ref}
+            minDistance={25}
+            maxPolarAngle={Math.PI / 2.2}
+            
+            // set panning limits
             onChange={(e) => {
-              const maxX = 80;
-              const minX = -80;
+              const maxX = 120;
+              const minX = -120;
               const maxY = 2;
               const minY = -1;
-              const maxZ = 80;
-              const minZ = -80;
+              const maxZ = 120;
+              const minZ = -120;
               const x = e?.target.target.x;
               const y = e?.target.target.y;
               const z = e?.target.target.z;
@@ -93,20 +141,10 @@ const Escene = () => {
               if (z < minZ || z > maxZ) {
                 e?.target.target.setZ(z < minZ ? minZ : maxZ);
               }
-            console.log(e?.target.target);
-            }
-
-          }
-            // target={[0, 0, 0]}
-            // maxPolarAngle={Math.PI / 2.1}
-            // minPolarAngle={Math.PI / 3}
-            // maxDistance={50}
-            ref={ref}
-            minDistance={25}
-            // enablePan={false}
-            // screenSpacePanning={false}
+              // console.log(e?.target.target);
+            }}
           />
-          {/* <fog attach="fog" color={"#262837"} near={1} far={15}/> */}
+
           <Stars
             radius={100} // Radius of the inner sphere (default=100)
             depth={50} // Depth of area where stars should fit (default=50)
@@ -115,62 +153,40 @@ const Escene = () => {
             saturation={1} // Saturation 0-1 (default=0)
             fade // Faded dots (default=false)
           />
-          {/* <Porshe /> */}
+
+          {/* ambientlight */}
           <ambientLight intensity={0.6} />
+
+          {/* models */}
           <Planet />
-          <Computers position={[50, .2, 50.28]}/>
+          <Computers position={[31.5, 0.2, 94]} />
+          <Porshe />
+
+          {/* plane */}
           <Plane />
           <GridPlane />
+
+          {/* call animate function */}
           <Animate
             controls={ref}
             positionCamera={positionCamera}
             target={target}
             lerping={lerping}
           />
-          {/* <ContactShadows
-            // resolution={1024}
-            // frames={1}
-            // position={[1, 0, 0]}
-            // scale={15}
-            // blur={0.5}
-            // opacity={1}
-            // far={20}
-            color={"#ffffff"}
-          /> */}
+          <Annotations/>
         </Suspense>
         <Preload all />
       </Canvas>
 
-      <div className="escene__btns">
-        <button
-          className="btnEscene"
-          onClick={() => {
-            setTarget({ x: 0, y: 0, z: 0 });
-            setPositionCamera({
-              x: -15,
-              y: 5,
-              z: 0,
-            });
-            setLerping(true);
-          }}
-        >
-          Planet
-        </button>
-        <button
-          className="btnEscene"
-          onClick={() => {
-            setTarget({ x: 50, y: 0, z: 50 });
-            setPositionCamera({
-              x: 30,
-              y: 5,
-              z: 50,
-            });
-            setLerping(true);
-          }}
-        >
-          Pc
-        </button>
-      </div>
+      {/* navbar */}
+      <nav className="escene__btns">
+        <Buttons
+          models={models}
+          active={active}
+          // setActive={setActive}
+          handleButtonClick={handleButtonClick}
+        />
+      </nav>
     </div>
   );
 };

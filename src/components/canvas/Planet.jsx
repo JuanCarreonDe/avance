@@ -5,6 +5,8 @@ const Planet = () => {
   const model = useGLTF("./earth/scene.gltf");
 
   return (
+
+    
     <mesh>
       {/* Luz hemisférica */}
       {/* <hemisphereLight
@@ -26,7 +28,7 @@ const Planet = () => {
       object={model.scene} 
       scale={0.5} 
       rotation={[0, 0, 0]}
-      position={[0,2.8,0]}
+      position={[100,2.8,0]}
       />
     </mesh>
   );

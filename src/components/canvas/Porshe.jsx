@@ -6,34 +6,14 @@ const Porshe = () => {
 
   return (
     <group
-    position={[40, -74, -300]}
-    scale={[50, 50, 50]}
+    position={[30, -50, -500]}
+    scale={[30, 30, 30]}
     rotation={[(-2 * Math.PI) / 180, (110 * Math.PI) / 180, 0]}
   >
     <mesh {...model.nodes["EXPORT_GOOGLE_SAT_WM"]}>
-      <meshBasicMaterial attach="material" color="#448AFF" wireframe fog={false}/>
-    </mesh>
-    {/* <hemisphereLight
-        position={[0, 0, 0]}
-        intensity={1}
-        groundColor="black"
+      <meshBasicMaterial attach="material" color="#543A59" wireframe fog={false}
       />
-
-      <spotLight
-        position={[0, 50, 0]}
-        angle={0.5}
-        penumbra={2}
-        intensity={2}
-        distance={200}
-        castShadow
-      /> */}
-      
-      {/* <primitive 
-      object={cerro.scene} 
-      scale={2.5} 
-      rotation={[0, 0, 0]}
-      position={[-50,2.5,-50]}
-      /> */}
+    </mesh>
   </group>
     // <mesh>
 

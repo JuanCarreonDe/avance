@@ -16,7 +16,7 @@ function GridPlane() {
   return (
     <gridHelper
       position={[0, 0, 0]}
-      args={[floorWidth, floorHeight, "#333", "#333"]}
+      args={[floorWidth, 50, "#d300d6", "#d300d6"]}
     />    
   );
 }
