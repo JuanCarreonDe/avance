@@ -178,7 +178,7 @@ const Escene = () => {
       <Data
           models={models}
           active={active}
-          // setActive={setActive}
+          setActive={setActive}
         />
     </div>
   );
