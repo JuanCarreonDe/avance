@@ -96,19 +96,6 @@ canvas {
   /* border: 1px solid red; */
 }
 
-/* .escene__btns::before{
-  content: "";
-  position: absolute; 
-  left: 0; 
-  right: 0; 
-  margin-left: auto; 
-  margin-right: auto; 
-  width: 1px;
-  height: 150px;
-  background: #fff;
-  z-index: 0;
-} */
-
 .btns__ul{
   height: 50%;
     display: flex;
@@ -156,7 +143,7 @@ canvas {
   animation-delay: all 0.3s;
   margin: 10px 10px;
   z-index: 1;
-
+  opacity: .1;
   /* cursor: pointer; */
 }
 
@@ -164,6 +151,40 @@ canvas {
 background: #a200ff;
 width: 10px;
 height: 10px;
+opacity: 1;
+}
+
+/* data */
+.escene__data{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -1000px;
+  right: 50%;
+  width: 40%;
+  height: 50%;
+  margin: auto;
+  background: #000;
+  border: 1px solid green;
+  transition: all .5s;
+  transition-delay: all .5s;
+  opacity: 0;
+  /* left: 10; */
+}
+
+.escene__data--active{
+  /* border: none; */
+  left: 0;
+  margin: auto;
+  /* right: 100%; */
+  opacity: 1;
+}
+
+.data__span{
+  color: red;
+}
+.data__span--active{
+  color: black;
 }
 
 

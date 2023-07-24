@@ -10,27 +10,44 @@ import Computers from "./canvas/Computers";
 import Porshe from "./canvas/Porshe";
 import Planet from "./canvas/Planet";
 import Buttons from "./Buttons";
+import Annotations from "./Annotations";
+import Data from "./Data"
 import { models } from "../constants";
-import { Html } from "@react-three/drei";
+// import { Html } from "@react-three/drei";
 
     // consts
     const radius = 100; // Radio del círculo
     const center = { x: 0, z: 0 }; // Centro del círculo (coordenadas x y z)
+
+// 
+    function estaCerca(numero1, numero2, tolerancia) {
+      const diferencia = Math.sqrt(
+        (numero2.x - numero1.x) * (numero2.x - numero1.x) +
+          (numero2.z - numero1.z) * (numero2.z - numero1.z)
+      );
+      return diferencia <= tolerancia;
+    }
 
 
 // animation to camera and target
 const Animate = ({ controls, lerping, positionCamera, target }) => {
   useFrame(({ camera }, delta) => {
     if (lerping) {
-      camera.position.lerp(positionCamera, delta * 3);
-      controls.current.target.lerp(target, delta * 3);
-      console.log(controls.current.maxDistance);
       if (controls.current.maxDistance === Infinity) {
+        camera.position.lerp(positionCamera, 0.05);
+        controls.current.target.lerp(target, 0.05);
         setTimeout(() => {
           controls.current.maxDistance = 60;
         }, 7000);
+      } else {
+        if (!estaCerca(camera.position, positionCamera, 1.5)) {
+          camera.position.lerp(positionCamera, 0.05);
+        }
+
+        if (!estaCerca(controls.current.target, target, 1.5)) {
+          controls.current.target.lerp(target, 0.05);
+        }
       }
-      console.log(controls.current.target);
     }
   });
 };
@@ -42,35 +59,6 @@ const calculateTargetCoordinates = (model, radius, center) => {
   const z = center.z + radius * Math.sin((angle * Math.PI) / 180);
   return { x, y: model.target.y, z };
 };
-
-function Annotations() {
-
-  return (
-    <>
-      {models.map((model, i) => {
-        const { x, y, z } = calculateTargetCoordinates(model, radius, center);
-        return (
-          <Html key={model.id} position={[x, model.target.y, z]}  >
-            <svg height="34" width="34" transform="translate(-16 -16)" style={{ cursor: 'pointer' }}>
-              <circle cx="17" cy="17" r="16" stroke="white" strokeWidth="2" fill="rgba(255,255,255,.66)" 
-              onClick={() => {
-                handleButtonClick(model)
-                alert("algo");
-              }} 
-              />
-              <text x="12" y="22" fill="white" fontSize={17} fontFamily="monospace" style={{ pointerEvents: 'none' }}>
-                {i + 1}
-              </text>
-            </svg>
-            {/* {a.description && i === selected && (
-              <div id={'desc_' + i} className="annotationDescription" dangerouslySetInnerHTML={{ __html: a.description }} />
-            )} */}
-          </Html>
-        )
-      })}
-    </>
-  )
-}
 
 // jsx and return
 const Escene = () => {
@@ -173,7 +161,7 @@ const Escene = () => {
             target={target}
             lerping={lerping}
           />
-          <Annotations/>
+<Annotations handleButtonClick={handleButtonClick} calculateTargetCoordinates={calculateTargetCoordinates} models={models} radius={radius} center={center}/>
         </Suspense>
         <Preload all />
       </Canvas>
@@ -187,6 +175,11 @@ const Escene = () => {
           handleButtonClick={handleButtonClick}
         />
       </nav>
+      <Data
+          models={models}
+          active={active}
+          // setActive={setActive}
+        />
     </div>
   );
 };
