@@ -1,7 +1,7 @@
 import {useGLTF} from "@react-three/drei";
 
 
-const Planet = () => {
+const Planet = ({objectRef, active, position}) => {
   const model = useGLTF("./earth/scene.gltf");
 
   return (
@@ -26,9 +26,9 @@ const Planet = () => {
 
       <primitive 
       object={model.scene} 
-      scale={0.5} 
+      scale={.5} 
       rotation={[0, 0, 0]}
-      position={[100,2.8,0]}
+      position={position}
       />
     </mesh>
   );

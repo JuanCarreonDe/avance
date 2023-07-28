@@ -1,17 +1,27 @@
 import { Html } from "@react-three/drei";
 
-function Annotations({ handleButtonClick, calculateTargetCoordinates, models, radius, center }) {
-    return (
-      <>
-        {models.map((model, i) => {
-          const { x, y, z } = calculateTargetCoordinates(model, radius, center);
-          return (
-            <Html key={model.id} position={[x, model.target.y, z]}>
-              <svg
+function Annotations({
+  handleButtonClick,
+  calculateTargetCoordinates,
+  models,
+  radius,
+  center,
+}) {
+  return (
+    <>
+      {models.map((model, i) => {
+        const { x, y, z } = calculateTargetCoordinates(
+          model,
+          radius,
+          center,
+          -1.5
+        );
+        return (
+          <Html key={model.id} position={[x, model.target.y, z]}>
+            {/* <svg
                 height="34"
                 width="34"
                 transform="translate(-16 -16)"
-                style={{ cursor: "pointer" }}
               >
                 <circle
                   cx="17"
@@ -34,15 +44,19 @@ function Annotations({ handleButtonClick, calculateTargetCoordinates, models, ra
                 >
                   {i + 1}
                 </text>
-              </svg>
-              {/* {a.description && i === selected && (
-                <div id={'desc_' + i} className="annotationDescription" dangerouslySetInnerHTML={{ __html: a.description }} />
-              )} */}
-            </Html>
-          );
-        })}
-      </>
-    );
-  }
+              </svg> */}
+            <p
+              onClick={() => {
+                handleButtonClick(model);
+              }}
+            >
+              {model.title}
+            </p>
+          </Html>
+        );
+      })}
+    </>
+  );
+}
 
-export default Annotations
+export default Annotations;

@@ -15,7 +15,6 @@ const Data = ({ models, active, setActive }) => {
             <div className="data__close" onClick={()=>setActive(-1)}>
             <span className="close__span close__span--1"></span>
             <span className="close__span close__span--2"></span>
-            <span className="close__span close__span--3"></span>
         </div>
             <span
               className="data__span"
